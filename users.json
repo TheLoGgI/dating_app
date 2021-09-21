@@ -1,0 +1,100 @@
+[
+  {
+    "userId": "15",
+    "name": "Jacob",
+    "postcode": "7100",
+    "birth": "1995-03-11",
+    "gender": "Male"
+  },
+  {
+    "userId": "16",
+    "name": "Jason",
+    "postcode": "8270",
+    "birth": "1990-09-24",
+    "gender": "Male"
+  },
+  {
+    "userId": "17",
+    "name": "Jesper",
+    "postcode": "8220",
+    "birth": "1997-02-04",
+    "gender": "Male"
+  },
+  {
+    "userId": "18",
+    "name": "Laurids",
+    "postcode": "8000",
+    "birth": "1997-05-14",
+    "gender": "Male"
+  },
+  {
+    "userId": "19",
+    "name": "Piotr",
+    "postcode": "8270",
+    "birth": "2000-05-01",
+    "gender": "Male"
+  },
+  {
+    "userId": "20",
+    "name": "Ida",
+    "postcode": "8000",
+    "birth": "1997-10-28",
+    "gender": "Female"
+  },
+  {
+    "userId": "21",
+    "name": "Alexandre",
+    "postcode": "8260",
+    "birth": "2000-06-13",
+    "gender": "Female"
+  },
+  {
+    "userId": "22",
+    "name": "Alex",
+    "postcode": "8260",
+    "birth": "1995-07-31",
+    "gender": "Male"
+  },
+  {
+    "userId": "23",
+    "name": "Wictor",
+    "postcode": "8200",
+    "birth": "1996-11-29",
+    "gender": "Male"
+  },
+  {
+    "userId": "24",
+    "name": "Emil",
+    "postcode": "8000",
+    "birth": "1998-02-07",
+    "gender": "Male"
+  },
+  {
+    "userId": "25",
+    "name": "Penda",
+    "postcode": "8000",
+    "birth": "1996-12-09",
+    "gender": "Male"
+  },
+  {
+    "userId": "26",
+    "name": "Lasse",
+    "postcode": "8000",
+    "birth": "1997-02-13",
+    "gender": "Male"
+  },
+  {
+    "userId": "27",
+    "name": "Caroline",
+    "postcode": "8260",
+    "birth": "1996-06-09",
+    "gender": "Female"
+  },
+  {
+    "userId": "28",
+    "name": "Barbara ",
+    "postcode": "8270",
+    "birth": "2000-02-20",
+    "gender": "Female"
+  }
+]
