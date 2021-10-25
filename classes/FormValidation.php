@@ -15,7 +15,6 @@ class FormValidation extends UserModel
         $args = func_get_args();
         if (count($args) === 0) {
             $args = get_object_vars($this);
-            var_dump($args);
         }
     
 
@@ -85,11 +84,9 @@ class FormValidation extends UserModel
     protected function countValidArguments() {
         $args = func_get_args();
         $countValid = 0;
-        var_dump($args);
         // In order to be able to directly modify array elements within the loop precede $value with &. - Variable by value
         foreach ($args as $value) {
-            print $value;
-            if ($value === null) $countValid++;
+            if (isset($value)) $countValid++;
         }
         return $countValid;
     }

@@ -4,8 +4,8 @@ session_start();
 
 include_once "../classes/User.php";
 // include_once('db_conn.php');
-var_dump($_POST);
-print "<br>" . count($_POST) . "<br>"; 
+// var_dump($_POST);
+// print "<br>" . count($_POST) . "<br>"; 
 // $email = mysqli_real_escape_string($mySQL, $_POST['email']);
 // $password = mysqli_real_escape_string($mySQL, $_POST['password']);
 

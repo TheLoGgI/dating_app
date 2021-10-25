@@ -43,20 +43,19 @@ abstract class UserController extends FormValidation implements UserInterface {
     *  @param partnergender {string}
     */
     function __construct($email, $password, $repassword, $firstname, $surname, $city, $birthday, $sex, $partnergender) {
-
-        $validArgumentsCount = $this->countValidArguments();
+        $args = func_get_args();
+        $validArgumentsCount = $this->countValidArguments($args);
 
         if ($validArgumentsCount > 2) {
             $response = $this->registerUser($email, $password, $repassword, $firstname, $surname, $city, $birthday, $sex, $partnergender);
-            // return $this;
-            print "new user regisert" . $response;
             exit();
         } 
 
         $this->email = $email;
         $this->password = $password;
         $this->loginUser();
-        print "user logged In";
+        // print "user logged In";
+        header("location: ../profil?user=$email");
         // $this->repassword = $repassword;
         // $this->firstname = $firstname;
         // $this->surname = $surname;
@@ -85,7 +84,7 @@ abstract class UserController extends FormValidation implements UserInterface {
             
             if ($isValidEmail) {
                 $userUid = $this->getUid();
-                $isCorrectPassword = $this->checkPassword($userUid->userId);
+                $isCorrectPassword = $this->checkPassword($userUid);
 
                 if ($isCorrectPassword) {
                     $currentUser = $this->getCurrentUser($userUid);

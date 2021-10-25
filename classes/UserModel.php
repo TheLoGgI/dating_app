@@ -8,6 +8,15 @@ include "Dbh.php";
 
 // }
 
+/**
+ * 
+ */
+trait TraitName
+{
+    
+}
+
+
 abstract class UserModel extends Dbh
 {
     protected function hasUser($uid) {
@@ -25,13 +34,13 @@ abstract class UserModel extends Dbh
 
     protected function getCurrentUser($uid) {
         $dbConnection = $this->connect();
-        $query = "SELECT userId FROM users WHERE email = '$this->email' AND userId = '$uid'";
-        $result = $dbConnection->query($query);
-        if ($result) {
-            return $result->fetch_object('UserController');
+        $userDetailsQuery = "SELECT * FROM userview WHERE userid = '$uid'"; // query for fetch userview
+        $userDetailsResult = $dbConnection->query($userDetailsQuery);
+        if ($userDetailsResult->num_rows === 1) {
+            return $userDetailsResult->fetch_object();
         }
 
-        return $result;
+        return $userDetailsResult;
     }
 
     protected function checkPassword($userId) {
@@ -50,7 +59,7 @@ abstract class UserModel extends Dbh
         $query = "SELECT userId FROM users WHERE email = '$this->email'";
         $result = $dbConnection->query($query);
         if ($result->num_rows == 1) {
-            return $result->fetch_object();
+            return $result->fetch_object()->userId;
         }
 
         return $result;
