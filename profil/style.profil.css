@@ -1,0 +1,23 @@
+/* @import url("../styles.global.css"); */
+@import url("../tailwind.util.css");
+
+.bg-tint-pink {
+  background-color: var(--clr-bg, pink);
+}
+
+.bg-shadow {
+  background: rgb(0, 0, 0);
+  background: linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 1) 0%,
+    rgba(59, 59, 59, 0.5) 30%,
+    rgba(122, 122, 122, 0.25) 45%,
+    rgba(255, 255, 255, 0) 100%
+  );
+}
+
+.editmodal {
+  left: 50%;
+  right: 50%;
+  transform: translateX(-50%);
+}

@@ -1,0 +1,18 @@
+
+DROP PROCEDURE IF EXISTS userView;
+
+
+DELIMITER //
+
+CREATE PROCEDURE userView(
+    IN userIdVar INT(5)
+)
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION, SQLWARNING
+    BEGIN 
+        ROLLBACK;
+    END;
+        SELECT * FROM userView WHERE userId = userIdVar;
+END //
+
+DELIMITER ;

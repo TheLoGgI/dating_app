@@ -6,7 +6,7 @@
     <meta name="description" content="" />
     <meta name="author" content="" />
     <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width" />
-    <title>Beteewn Dating</title>
+    <title>Meeting</title>
     <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet" />
 </head>

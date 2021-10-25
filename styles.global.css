@@ -1,0 +1,12 @@
+:root {
+  --clr-primary: rgb(255, 71, 112);
+  --clr-primary-shade: hsla(347, 100%, 44%, 1);
+  --clr-primary-tint: hsla(341, 100%, 78%, 1);
+  --clr-bg: #fef2f6;
+}
+
+body {
+  /* margin: 0;
+    padding: 0; */
+  box-sizing: border-box;
+}
