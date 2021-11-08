@@ -8,6 +8,7 @@ include_once "../classes/User.php";
 
 $data = json_decode(file_get_contents('php://input'));
 
+
 $email = $data->email ?? null;
 $password = $data->password ?? null;
 $repassword = $data->repassword ?? null;
@@ -22,13 +23,13 @@ $user = new User($email, $password, $repassword, $firstname, $surname, $city, $b
 
 if ($user->status === "loggedin") {
     // User logged in
-    $name = $_SESSION['current_user']->fullname;
+    // $name = $_SESSION['current_user']->fullname;
     // header("location: /profil/?user=$name");
     $res = array(
         "statusText" => 'Success', 
         "status" => 200,
         "event" => 'loggedin',
-        "user" => $user
+        "user" => json_encode($user)
     );
     http_response_code(200);
     
@@ -39,6 +40,8 @@ if ($user->status === "loggedin") {
 }
 
 if ($user->status === "signedup") {
+
+    // exit($user->status);
     // User signed up
     // header("location: /login/?succes=usercreated");
     $res = array(
@@ -47,6 +50,13 @@ if ($user->status === "signedup") {
         "event" => 'signedup',
         "user" => json_encode($user)
     );
+
+    http_response_code(200);
+    
+      // encode your PHP Object or Array into a JSON string.
+      // stdClass or array
+      // making sure nothing is added
+    exit(json_encode($res));
     
 }
 

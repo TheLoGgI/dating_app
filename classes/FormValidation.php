@@ -14,12 +14,9 @@ class FormValidation extends UserModel
     protected function hasEmptyInputs()
     {
         $args = func_get_args();
-        var_dump(count($args));
         if (count($args) === 0) {
             $args = get_object_vars($this);
         }
-
-        var_dump($args);
 
         $i = 0;
 
@@ -38,7 +35,6 @@ class FormValidation extends UserModel
      * @return {Boolean} true if email is valid, false otherwise.
      */ 
     protected function validateEmail() {
-        var_dump($this->email);
         // https://www.w3schools.com/php/php_form_url_email.asp
         if (!filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
             return false;

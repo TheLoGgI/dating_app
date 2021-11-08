@@ -52,13 +52,11 @@ abstract class UserController extends FormValidation implements UserInterface {
 
         if ($validArgumentsCount > 2) {
 
-            $response = $this->registerUser($email, $password, $repassword, $firstname, $surname, $city, $birthday, $sex, $partnergender);
-            var_dump($response);
-            exit('userRegister');
+            $this->registerUser($email, $password, $repassword, $firstname, $surname, $city, $birthday, $sex, $partnergender);
+            return true;
         } 
-
         
-        // $this->loginUser();
+        $this->loginUser();
 
     } 
 
@@ -127,14 +125,14 @@ abstract class UserController extends FormValidation implements UserInterface {
         $hasValidInputs = $this->hasEmptyInputs(...$args);
 
         $isPasswordEquel = $this->validatePassword($password, $repassword);
-        // $formtedbirthday = $this->formatBirthday($birthday);
+        $formtedbirthday = $this->formatBirthday($birthday);
 
         if ($hasValidInputs === false && $isPasswordEquel) {    
             // All inputs is filled;
             $isValidEmail = $this->validateEmail();
             if ($isValidEmail) {
                 
-                $response = $this->signUpUser($email, $password, $firstname, $surname, $city, $birthday, $sex, $partnergender);
+                $response = $this->signUpUser($email, $password, $firstname, $surname, $city, $formtedbirthday, $sex, $partnergender);
                 if ($response) {
                     $this->status = "signedup";
                     return true;
@@ -144,17 +142,16 @@ abstract class UserController extends FormValidation implements UserInterface {
                 
 
             }
+            
+            $this->status = "error";
+            return new Exception("Invalid email");
         }
 
-        // Else feedback
-            // nothing happend
+        $this->status = "error";
+        return new Exception("Invalid password");
 
 
     }
-    
-
-
-
     
 
     public function signoutUser() {

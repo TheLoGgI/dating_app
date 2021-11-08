@@ -158,6 +158,7 @@
                 body: JSON.stringify(Object.fromEntries(datapack))
             }
             const response = await fetch(options.requestUrl, options)
+            console.log('response: ', response);
             
             if (response.ok) {
                 const requestData = await response.text()

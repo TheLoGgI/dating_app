@@ -94,6 +94,7 @@ abstract class UserModel extends Dbh
         
         $sql = "CALL createUser('$email', '$hashedPassword', '$firstname', '$surname', '$city', '$birthday','$sex', '$partnergender')";
         $result = $dbConnection->query($sql);
+        var_dump($sql, $result);
         if ($result == 1) {
             return true;
             exit();
