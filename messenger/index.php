@@ -17,7 +17,7 @@
             document.getElementById('root').innerHTML = e.data;
         };
     </script>
-</head>
+</head> 
 
 <body>
     <div class="login-modal w-3/4 lg:my-4 grid grid-cols-2 relative z-10">

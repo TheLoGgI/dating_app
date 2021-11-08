@@ -81,6 +81,8 @@
     }
 
     ?>
+
+    <?php include_once("components/header.php") ?>
     <!-- HTML Documuent -->
     <section class="mx-auto mt-4 px-40">
         <h1 class="text-6xl font-bold text-blue-600 my-6">Online Users</h1>

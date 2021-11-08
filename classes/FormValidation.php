@@ -5,6 +5,7 @@ include "Util.php";
 
 class FormValidation extends UserModel 
 {
+    use utillityDatabaseFormat;
 
     /**
      * Check for empty inputs
@@ -13,10 +14,12 @@ class FormValidation extends UserModel
     protected function hasEmptyInputs()
     {
         $args = func_get_args();
+        var_dump(count($args));
         if (count($args) === 0) {
             $args = get_object_vars($this);
         }
-    
+
+        var_dump($args);
 
         $i = 0;
 
@@ -35,6 +38,7 @@ class FormValidation extends UserModel
      * @return {Boolean} true if email is valid, false otherwise.
      */ 
     protected function validateEmail() {
+        var_dump($this->email);
         // https://www.w3schools.com/php/php_form_url_email.asp
         if (!filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
             return false;
@@ -66,20 +70,20 @@ class FormValidation extends UserModel
         
     }
 
-    protected function split($string) {
-        $result = [];
-        $token = strtok($string,'-');
-        while ($token !== false) {
-            array_push($result, $token);
-            $token = strtok("-");
-        }
-        return $result;
-    }
+    // protected function split($string) {
+    //     $result = [];
+    //     $token = strtok($string,'-');
+    //     while ($token !== false) {
+    //         array_push($result, $token);
+    //         $token = strtok("-");
+    //     }
+    //     return $result;
+    // }
 
-    protected function formatBirthday($string) {
-        $parts = $this->split($string);
-        return "19$parts[2]-$parts[1]-$parts[0]";
-    }
+    // protected function formatBirthday($string) {
+    //     $parts = $this->split($string);
+    //     return "19$parts[2]-$parts[1]-$parts[0]";
+    // }
 
     protected function countValidArguments() {
         $args = func_get_args();

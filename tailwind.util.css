@@ -28,6 +28,9 @@
 .border-primary {
   border-color: var(--clr-primary);
 }
+.border-primary-tint {
+  border-color: var(--clr-primary-tint);
+}
 
 .leading-12 {
   line-height: 3.5rem;

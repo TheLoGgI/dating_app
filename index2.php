@@ -1,5 +1,7 @@
 <?php namespace Datingapp;
+include "./server/db_conn.php";
 include "classes/User.php";
+// include "classes/UserView.php";
 // use func_num_arg;
 // use Datingapp\FormValidation;
 
@@ -17,8 +19,22 @@ include "classes/User.php";
 <body>
 <?php
 
-$user = new User("katrine@gmail.com", "katrine", "katrine", "firstname", "surname", "city", "birthday", "gender", "partnergender");
-$uid = $user->getUserUid();
+// $user = new UserView();
+$user = $user->init(5, "userview");
+var_dump($user);
+// $uid = $user->getUserUid();
+// $sql = "CALL createUser('emilie@gmail.com', 'emiliepassword', 'emilie', 'emilie', 'Aarhus', '1994-01-10','male', 'Female')";
+// $sql = "CALL GetOfficeByCountry(5)";
+// $sql = "CALL createUser('$email', '$password', '$firstname', '$surname', '$city', '$birthday','$sex', '$partnergender')";
+// $result = $mySQL->query($sql);
+
+// print "<br>";
+// print password_hash('maltepassword', PASSWORD_DEFAULT);
+// print "<br>";
+
+// var_dump($result);
+// var_dump($result->fetch_object());
+// var_dump($result->fetch_all());
 
 // print password_hash('katrine', PASSWORD_DEFAULT);
 
@@ -30,9 +46,11 @@ $uid = $user->getUserUid();
 // $user->hasFields();
 
 // test();
-print <<<EOD
+// print <<<EOD
 
-EOD;
+// EOD;
+
+
 
 ?>
 
@@ -96,6 +114,6 @@ EOD;
                     <input type="submit" class="bg-primary hover:bg-hover-primary cursor-pointer text-white max-w-min justify-self-center text-2xl rounded-full px-16 py-2 filter drop-shadow-lg" value="SIGN UP">
                 </form>
 
-    <script type="text/javascript" src="main.js"></script>
+    <!-- <script type="text/javascript" src="main.js"></script> -->
 </body>
 </html>

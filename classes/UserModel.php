@@ -1,20 +1,13 @@
 <?php namespace Datingapp;
 
 include "Dbh.php";
+// include "API.php";
 // interface FormValidationInterface {
 //     public function hasEmptyInputs();
 //     public function passwordMatch(); 
 //     public function invalidUid();
 
 // }
-
-/**
- * 
- */
-trait TraitName
-{
-    
-}
 
 
 abstract class UserModel extends Dbh
@@ -32,12 +25,29 @@ abstract class UserModel extends Dbh
         return $resultCheck;
     }
 
-    protected function getCurrentUser($uid) {
+    protected function getUser($uid, $class = "stdClass") {
         $dbConnection = $this->connect();
         $userDetailsQuery = "SELECT * FROM userview WHERE userid = '$uid'"; // query for fetch userview
         $userDetailsResult = $dbConnection->query($userDetailsQuery);
         if ($userDetailsResult->num_rows === 1) {
-            return $userDetailsResult->fetch_object();
+            return $userDetailsResult->fetch_object($class);
+        }
+
+        return $userDetailsResult;
+    }
+
+
+    protected function getAllUsers($class = "stdClass") {
+        $dbConnection = $this->connect();
+        $userDetailsQuery = "SELECT * FROM userview LIMIT 100"; // query for fetch userview
+        $userDetailsResult = $dbConnection->query($userDetailsQuery);
+        if ($userDetailsResult->num_rows !== 0) {
+        
+            $userDataCollection = [];   
+            while ($obj = $userDetailsResult->fetch_object($class)) {
+                $userDataCollection[] = $obj;
+            }
+            return $userDataCollection;
         }
 
         return $userDetailsResult;
@@ -50,7 +60,6 @@ abstract class UserModel extends Dbh
         $result = $dbConnection->query($query);
         
         $dbHashedPassword = $result->fetch_object();
-        // var_dump($dbHashedPassword, $this->password);
         return password_verify($this->password, $dbHashedPassword->password);
     }
 
@@ -79,12 +88,13 @@ abstract class UserModel extends Dbh
     *  @param partnergender String
      * @return Boolean true if everything went OK, else false.
      */ 
-    protected function signUpUser($email, $password, $repassword, $firstname, $surname, $city, $birthday, $sex, $partnergender) {
+    protected function signUpUser($email, $password, $firstname, $surname, $city, $birthday, $sex, $partnergender) {
         $dbConnection = $this->connect();
-        $sql = "CALL createUser('$email', '$password', '$firstname', '$surname', '$city', '$birthday','$sex', '$partnergender')";
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+        
+        $sql = "CALL createUser('$email', '$hashedPassword', '$firstname', '$surname', '$city', '$birthday','$sex', '$partnergender')";
         $result = $dbConnection->query($sql);
-
-        if ($result->num_rows == 1) {
+        if ($result == 1) {
             return true;
             exit();
         }

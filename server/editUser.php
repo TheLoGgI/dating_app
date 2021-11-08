@@ -2,21 +2,6 @@
 include_once("db_conn.php");
 include_once("../classes/File.php");
 
-
-class User
-{
-    private $firstname;
-    private $surname;
-    private $email;
-    private $sex;
-    private $partnerSex;
-    private $city;
-    private $country;
-    private $proffession;
-    private $description;
-    private $profilImage;
-}
-
 function split($string)
 {
     $result = [];
@@ -37,42 +22,45 @@ function formatBirthday($birthArray)
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $userid = intval($_POST['userid']);
-    $profilId = intval($_POST['profilid']);
     $email = $_POST['email'];
     $editfirstname = $_POST['editfirstname'];
     $editsurname = $_POST['editsurname'];
     $editsex = $_POST['editsex'];
     $editpartnersex = $_POST['editpartnersex'];
     $editbirthday = formatBirthday(split($_POST['editbirthday']));
-    $editdescription = $_POST['editdescription'];
+    $editdescription = trim($_POST['editdescription']);
     $editcity = $_POST['editcity'];
     $editcounty = $_POST['editcounty'];
     $editproffession = $_POST['editproffesion'];
     $profilImage = null;
 
 
-    if (!empty($_FILES['profilImage'])) {
+    $userDetailsQuery = "SELECT * FROM userview WHERE userid = '$userid' AND email = '$email'"; // query for fetch userview
+    $userDetailsResult = $mySQL->query($userDetailsQuery);
+    $userObject =  $userDetailsResult->fetch_object();
+    // var_dump($_FILES['profilImage']);
+    // var_dump(isset($_FILES['profilImage']['tmp_name']));
+    if (isset($_FILES['profilImage']['tmp_name'])) {
 
         $profilImage = new File($_FILES['profilImage'], "../uploads/profil/profilImage$userid-$editfirstname");
-        $isUploaded = $profilImage->upload();
+        
+        if ($userDetailsResult->num_rows === 1 && $profilImage->status) {
+            $profilImaggeLocation = $profilImage->location;
 
-        $userDetailsQuery = "SELECT * FROM userview WHERE userid = '$userid' AND email = '$email'"; // query for fetch userview
-        $userDetailsResult = $mySQL->query($userDetailsQuery);
-
-        if ($userDetailsResult->num_rows === 1 && $isUploaded) {
-            $profilImaggeLocation = $profilImage->getFileLocation();
-
-            $updateUserQuery = "CALL updateUser($profilId, '$email', '$editfirstname', '$editsurname', '$editsex', '$editpartnersex', '$editdescription', '$editcity', '$editcounty','$editbirthday', '$editproffession', '$profilImaggeLocation');";
+            $updateUserQuery = "CALL updateUser($userid, '$email', '$editfirstname', '$editsurname', '$editsex', '$editpartnersex', '$editdescription', '$editcity', '$editcounty','$editbirthday', '$editproffession', '$profilImaggeLocation');";
             $updateUserResult = $mySQL->query($updateUserQuery);
             header("location: ../profil/success");
         } else {
-            $profilImage->deleteFile();
+            $updateUserQuery = "CALL updateUser($userid, '$email', '$editfirstname', '$editsurname', '$editsex', '$editpartnersex', '$editdescription', '$editcity', '$editcounty','$editbirthday', '$editproffession', '$userObject->profilImage');";
+            $updateUserResult = $mySQL->query($updateUserQuery);
             header("location: ../profil?profil not updated");
         }
         
         
     } else {
-        print "Profil image not uploaded";
+        // Update other information
+        $updateUserQuery = "CALL updateUser($userid, '$email', '$editfirstname', '$editsurname', '$editsex', '$editpartnersex', 'COUNT COOUNT CONUNT CONUNT OCNOTUN CONOCHEO ONDONIU', '$editcity', '$editcounty','$editbirthday', '$editproffession', '$userObject->profilImage');";
+        $updateUserResult = $mySQL->query($updateUserQuery);
         header("location: ../profil?profil image not updated");
     }
     

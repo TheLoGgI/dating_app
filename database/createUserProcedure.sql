@@ -28,28 +28,20 @@ BEGIN
     THEN
         INSERT INTO profil(firstname, surname,sex, partnerSex, city, birthday) 
             VALUES (firstnameVar, surnameVar, sexVar, partnersexVar, cityVar, birthdayVar); 
-        INSERT INTO users(profilId, email, password) VALUES (@@IDENTITY , emailVar, MD5(passwordVar));
+
+        INSERT INTO users(userId, email, password) VALUES (@@IDENTITY , emailVar, passwordVar);
+
     END IF;
 
-
-    -- SET @profilId := ( SELECT profilId FROM users WHERE email = emailVar);
-
-    -- IF 
-    --     NOT EXISTS (SELECT profilId FROM profil WHERE profilId = @profilId)
-    -- THEN 
-    --     INSERT INTO profil(firstname, surname,sex, partnerSex, city, birthday) 
-    --         VALUES (firstnameVar, surnameVar, sexVar, partnersexVar, cityVar, birthdayVar); 
-    -- END IF;
     COMMIT;
+    -- SELECT * FROM userview WHERE userId = @@IDENTITY;
 END //
 
 DELIMITER ;
 
-
 -- EXAMPLE OF CALL
 -- CALL createUser('username', 'password');
--- CALL createUser('mads', 'password');
-
+-- CALL createUser('katrinehansen@gmail.com', 'password', 'mette', 'hansen', 'herning', '1983-02-21','female', 'female');
 
 -- TRUNCATE users;
 -- ALTER TABLE matches DROP FOREIGN KEY fk_user2;

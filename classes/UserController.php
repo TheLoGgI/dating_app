@@ -19,9 +19,10 @@ abstract class UserController extends FormValidation implements UserInterface {
     // private user data
     protected $password;
     protected $repassword;
+    private $uid;
     
     // Public User data
-    public $uid;
+    public $status;
     public $sex;
     public $partnerGender;
     public $birthday;
@@ -44,34 +45,25 @@ abstract class UserController extends FormValidation implements UserInterface {
     */
     function __construct($email, $password, $repassword, $firstname, $surname, $city, $birthday, $sex, $partnergender) {
         $args = func_get_args();
-        $validArgumentsCount = $this->countValidArguments($args);
-
-        if ($validArgumentsCount > 2) {
-            $response = $this->registerUser($email, $password, $repassword, $firstname, $surname, $city, $birthday, $sex, $partnergender);
-            exit();
-        } 
+        $validArgumentsCount = $this->countValidArguments(...$args);
 
         $this->email = $email;
         $this->password = $password;
-        $this->loginUser();
-        // print "user logged In";
-        header("location: ../profil?user=$email");
-        // $this->repassword = $repassword;
-        // $this->firstname = $firstname;
-        // $this->surname = $surname;
-        // $this->city = $city;
-        // $this->birthday = $birthday;
-        // $this->sex = $sex;
-        // $this->partnerGender = $partnergender;
+
+        if ($validArgumentsCount > 2) {
+
+            $response = $this->registerUser($email, $password, $repassword, $firstname, $surname, $city, $birthday, $sex, $partnergender);
+            var_dump($response);
+            exit('userRegister');
+        } 
+
+        
+        // $this->loginUser();
 
     } 
 
     public function getUserUid() {
         return $this->uid;
-    }
-
-    function req($request) {
-        print $request;
     }
 
     public function loginUser() {
@@ -87,21 +79,33 @@ abstract class UserController extends FormValidation implements UserInterface {
                 $isCorrectPassword = $this->checkPassword($userUid);
 
                 if ($isCorrectPassword) {
-                    $currentUser = $this->getCurrentUser($userUid);
+                    $currentUser = $this->getUser($userUid);
+                    if ($currentUser !== false) {
+                        foreach ($currentUser as $key => $value){
+                                $this->{$key} = $value;
+                        }
+                    }
+                    // var_dump($this);
+                    // $this = $currentUser;
                     $_SESSION['current_user'] = $currentUser;
+                    $this->status = "loggedin";
+                    $this->password = null;
                     return true;
                 }
                 
                 $_SESSION['current_user'] = null;
+                $this->status = "error";
                 return new Exception("Invalid password");
 
             }
 
             $_SESSION['current_user'] = null;
+            $this->status = "error";
             return new Exception("Invalid email");
         }
 
         $_SESSION['current_user'] = null;
+        $this->status = "error";
         return new Exception("Invalid inputs");
         
     }
@@ -118,21 +122,21 @@ abstract class UserController extends FormValidation implements UserInterface {
     *  @param sex String
     *  @param partnergender String
     */
-    private function registerUser($email, $password, $repassword, $firstname, $surname, $city, $birthday, $sex, $partnergender) {
-        $hasValidInputs = $this->hasEmptyInputs();
+    public function registerUser($email, $password, $repassword, $firstname, $surname, $city, $birthday, $sex, $partnergender) {
+        $args = func_get_args();
+        $hasValidInputs = $this->hasEmptyInputs(...$args);
+
         $isPasswordEquel = $this->validatePassword($password, $repassword);
-        // print $birthday;
-        // $isValidBirthday = $this->validateBirthday($birthday);
-        $birthday = $this->formatBirthday($birthday);
+        // $formtedbirthday = $this->formatBirthday($birthday);
 
         if ($hasValidInputs === false && $isPasswordEquel) {    
             // All inputs is filled;
             $isValidEmail = $this->validateEmail();
             if ($isValidEmail) {
-
-                $response = $this->signUpUser($email, $password, $repassword, $firstname, $surname, $city, $birthday, $sex, $partnergender);
                 
+                $response = $this->signUpUser($email, $password, $firstname, $surname, $city, $birthday, $sex, $partnergender);
                 if ($response) {
+                    $this->status = "signedup";
                     return true;
                 }
 
@@ -141,6 +145,9 @@ abstract class UserController extends FormValidation implements UserInterface {
 
             }
         }
+
+        // Else feedback
+            // nothing happend
 
 
     }
@@ -156,7 +163,7 @@ abstract class UserController extends FormValidation implements UserInterface {
         session_unset();
         session_destroy();
 
-        $url = "http://localhost:3000/login/";
+        $url = "http://localhost:3000/login";
 
         header("Location: $url?msg=user logged out");
     }

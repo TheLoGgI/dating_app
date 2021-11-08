@@ -1,5 +1,5 @@
 const loginModalSlider = document.querySelector('#loginModalSlider');
-document.querySelector('#loginModalSlider button').addEventListener('click', () => {
+document.querySelector('#loginModalSlider button')?.addEventListener('click', () => {
     loginModalSlider.classList.toggle('active');
 });
 

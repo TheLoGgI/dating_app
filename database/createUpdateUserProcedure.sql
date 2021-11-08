@@ -1,7 +1,7 @@
 DROP PROCEDURE IF EXISTS updateUser;
 DELIMITER // 
 CREATE PROCEDURE updateUser(
-  IN profilIdVar INT,
+  IN userIdVar INT,
   IN emailVar VARCHAR(100),
   IN firstnameVar VARCHAR(255),
   IN surnameVar VARCHAR(255),
@@ -14,11 +14,11 @@ CREATE PROCEDURE updateUser(
   IN proffessionVar VARCHAR(100),
   IN profilImageVar VARCHAR(255)
 ) 
-
-BEGIN DECLARE EXIT HANDLER FOR SQLEXCEPTION,
-SQLWARNING BEGIN ROLLBACK;
-END;
-START TRANSACTION;
+BEGIN 
+-- DECLARE EXIT HANDLER FOR SQLEXCEPTION,
+-- SQLWARNING BEGIN ROLLBACK; 
+-- END;
+-- START TRANSACTION;
 
 
   UPDATE profil 
@@ -28,11 +28,26 @@ START TRANSACTION;
       partnerSex = partnerSexVar,
       city = cityVar,
       country = countryVar,
+      birthday = birthdayVar,
       proffession = proffessionVar,
       description = descriptionVar,
       profilImage = profilImageVar
-  WHERE profilId = profilIdVar;
+  WHERE userId = userIdVar;
 
-COMMIT;
+-- COMMIT;
 END // 
 DELIMITER;
+
+  
+  -- UPDATE profil 
+  -- SET firstname = "Michala",
+  -- surname = "Nissen", 
+  -- sex = "female",
+  -- partnersex = "female",
+  -- city = "Hobro",
+  -- country = "DK",
+  -- birthday = "1996-10-27",
+  -- `description` = 'profil profil profil profil',
+  -- proffession = "Rolespilskriger",
+  -- profilImage = "/uploads/defualtProfil.jpg"
+  -- WHERE userId = 6;

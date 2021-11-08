@@ -1,18 +1,18 @@
 <?php
 
-$address = '0.0.0.0';
-$port = 12345;
+$address = '192.';
+$port = 3000;
 
 if (!extension_loaded('sockets')) {
     die('The sockets extension is not loaded.');
 }
 // create unix udp socket
-$socket = socket_create(AF_UNIX, SOCK_DGRAM, 0);
+$socket = socket_create(AF_INET, SOCK_DGRAM, 0);
 if (!$socket)
     die('Unable to create AF_UNIX socket');
 
 // same socket will be used in recv_from and send_to
-$server_side_sock = dirname(__FILE__) . "/server.sock";
+$server_side_sock = dirname(__FILE__) . "\socket.php";
 if (!socket_bind($socket, $server_side_sock))
     die("Unable to bind to $server_side_sock");
 

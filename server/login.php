@@ -1,42 +1,71 @@
 <?php namespace Datingapp;
 session_start();
 
+header('Content-Type: application/json');
+
 
 include_once "../classes/User.php";
-// include_once('db_conn.php');
-// var_dump($_POST);
-// print "<br>" . count($_POST) . "<br>"; 
-// $email = mysqli_real_escape_string($mySQL, $_POST['email']);
-// $password = mysqli_real_escape_string($mySQL, $_POST['password']);
+
+$data = json_decode(file_get_contents('php://input'));
+
+$email = $data->email ?? null;
+$password = $data->password ?? null;
+$repassword = $data->repassword ?? null;
+$firstname = $data->firstname ?? null;
+$surname = $data->surname ?? null;
+$city = $data->city ?? null;
+$birthday = $data->birthday ?? null;
+$sex = $data->sex ?? null;
+$partnergender = $data->partnergender ?? null;
+
+$user = new User($email, $password, $repassword, $firstname, $surname, $city, $birthday, $sex, $partnergender);
+
+if ($user->status === "loggedin") {
+    // User logged in
+    $name = $_SESSION['current_user']->fullname;
+    // header("location: /profil/?user=$name");
+    $res = array(
+        "statusText" => 'Success', 
+        "status" => 200,
+        "event" => 'loggedin',
+        "user" => $user
+    );
+    http_response_code(200);
+    
+      // encode your PHP Object or Array into a JSON string.
+      // stdClass or array
+      // making sure nothing is added
+    exit(json_encode($res));
+}
+
+if ($user->status === "signedup") {
+    // User signed up
+    // header("location: /login/?succes=usercreated");
+    $res = array(
+        "statusText" => 'Success', 
+        "status" => 200,
+        "event" => 'signedup',
+        "user" => json_encode($user)
+    );
+    
+}
+
+if ($user->status === "error") {
+    // User NOT signed up
+    // header("location: /login/?failed=usercreated");
+    $res = array(
+        "statusText" => 'Error, Bad request',
+        "event" => 'login', 
+        "status" => 500,
+        "user" => json_encode($user)
+    );
+    http_response_code(500);
+    
+      // encode your PHP Object or Array into a JSON string.
+      // stdClass or array
+      // making sure nothing is added
+    exit(json_encode($res));
+}
 
 
-$user = new User(...$_POST);
-// var_dump($user);
 
-// $sql = "SELECT userId FROM users 
-//             WHERE email = '$email' AND password = MD5('$password')";
-// $result = $mySQL->query($sql);
-
-// if ($result->num_rows !== 0) {
-//     $userInfo = $result->fetch_object(); // fetch object from database
-//     $userId = intval($userInfo->userId); // convert userid to int
-
-//     $userDetailsQuery = "SELECT * FROM userview WHERE userid = '$userId'"; // query for fetch userview
-//     $userDetailsResult = $mySQL->query($userDetailsQuery);
-
-//     if (isset($userDetailsResult)) {
-//         $_SESSION['current_user'] = $userDetailsResult->fetch_object();
-//         header("location: ../profil?user=$email");
-//         exit;
-//     } else {
-
-//         // If profil don't exists
-//         header("location: ../login/?user=create new user");
-//         // $userDetailsResult = $mySQL->query("INSERT INTO profil VALUES ();");
-
-//     }
-// } else {
-//     // wrong password or email
-//     header("location: ../login/?user=wrong password or email");
-//     exit;
-// }
