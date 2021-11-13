@@ -5,6 +5,9 @@ include "classes/User.php";
 // use func_num_arg;
 // use Datingapp\FormValidation;
 
+// $json = file_get_contents('api/users');
+// var_dump($json);
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -14,14 +17,13 @@ include "classes/User.php";
     <meta name="author" content="" />
     <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width" />
     <title>Test</title>
-    <link href="css/style.css" rel="stylesheet"/>
 </head>
 <body>
 <?php
 
 // $user = new UserView();
-$user = $user->init(5, "userview");
-var_dump($user);
+// $user = $user->init(5, "userview");
+// var_dump($user);
 // $uid = $user->getUserUid();
 // $sql = "CALL createUser('emilie@gmail.com', 'emiliepassword', 'emilie', 'emilie', 'Aarhus', '1994-01-10','male', 'Female')";
 // $sql = "CALL GetOfficeByCountry(5)";
@@ -49,7 +51,6 @@ var_dump($user);
 // print <<<EOD
 
 // EOD;
-
 
 
 ?>
@@ -114,6 +115,11 @@ var_dump($user);
                     <input type="submit" class="bg-primary hover:bg-hover-primary cursor-pointer text-white max-w-min justify-self-center text-2xl rounded-full px-16 py-2 filter drop-shadow-lg" value="SIGN UP">
                 </form>
 
-    <!-- <script type="text/javascript" src="main.js"></script> -->
+    <script>
+        fetch('api/users').then(res => res.json()).then(data => {
+            console.log('data: ', data);
+        })
+
+    </script>
 </body>
 </html>

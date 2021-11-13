@@ -15,13 +15,12 @@ class API extends UserModel
         }
     }
 
-    public function users() {
-        // var_dump($this->getAllUsers());
+    public function users($query = null, $limit = 100) {
+        if (!empty($query)) {
+            return $this->queryUsers($query, $limit);
+        }
+
         return $this->getAllUsers();
-        // return array(
-        //     "statusText" => 'success, email sendt', 
-        //     "status" => 200,
-        // );
     }
 
     public function user($uuid) {
@@ -30,6 +29,18 @@ class API extends UserModel
 
     public static function generateApiKey() {
         return uniqid(rand(1, 99999));
+    }
+
+    public static function getQueryParam($queryparam) {
+        if (isset($_GET[$queryparam])) {
+            return $_GET[$queryparam];
+        }
+    
+        if (isset($_POST[$queryparam])) {
+            return $_POST[$queryparam];
+        }
+        
+        return null;
     }
 
     

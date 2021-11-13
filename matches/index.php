@@ -29,7 +29,7 @@
     </section>
     <script>
 
-        function renderPersosn(name, birth, location) {
+        function renderPerson(name, birth, location) {
             const container = document.querySelector("#searchResult")
             const personTemplate = `
             <div class="person hover:bg-gray-200 rounded-md p-4 inline-block">
@@ -54,7 +54,7 @@
             let data = await response.json();
             console.log('data: ', data);
             data.content.forEach(({fullname, birthday, partnerSex})=> {
-                renderPersosn(fullname, birthday, partnerSex)
+                renderPerson(fullname, birthday, partnerSex)
             });
             // document.querySelector("#searchResult").innerHTML = "";
 

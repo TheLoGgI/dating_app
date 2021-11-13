@@ -48,8 +48,8 @@
                     <div>
                         <div class="input-field relative p-2 group text-xl cursor-pointer">
                             <select class="text-2xl bg-gray-100 p-2 w-full" name="sex" id="sexforminput">
-                                <option value="" disabled hidden>Dit køn</option>
-                                <option value="male" selected>Mand</option>
+                                <option value="" selected disabled hidden>Dit køn</option>
+                                <option value="male">Mand</option>
                                 <option value="female">Kvinde</option>
                                 <option value="non-binary">non-binær</option>
                                 <option value="other">other</option>
@@ -57,9 +57,9 @@
                         </div>
                         <div class="input-field relative p-2 group text-xl cursor-pointer">
                             <select class="text-2xl bg-gray-100 p-2 w-full" name="partnergender" id="sexofpartnerforminput" autocomplete="gender">
-                                <option value=""  disabled hidden>Køn partner du søger</option>
+                                <option value="" selected disabled hidden>Køn partner du søger</option>
                                 <option value="male">Mand</option>
-                                <option value="female" selected>Kvinde</option>
+                                <option value="female">Kvinde</option>
                                 <option value="non-binary">non-binær</option>
                                 <option value="biseksual">biseksual</option>
                             </select>
@@ -68,35 +68,35 @@
 
                     <div>
                         <div class="input-field relative p-2 group text-xl cursor-pointer">
-                            <input class="text-2xl bg-gray-100 p-2 outline-none w-full" type="text" name="birthday" id="birthdayforminput" autocomplete="bday" placeholder=" " value="02-06-2000" required>
+                            <input class="text-2xl bg-gray-100 p-2 outline-none w-full" type="text" name="birthday" id="birthdayforminput" autocomplete="bday" placeholder=" " required>
                             <label class="absolute text-gray-600 pl-4 top-1/4 left-0 text-2xl select-none" for="birthdayforminput">Fødselsdag (dd-mm-åååå)</label>
                         </div>
                         <div class="input-field relative p-2 group text-xl cursor-pointer">
-                            <input class="text-2xl bg-gray-100 p-2 outline-none w-full" type="text" name="city" id="cityforminput" autocomplete="city" placeholder=" " value="Ikast" required>
+                            <input class="text-2xl bg-gray-100 p-2 outline-none w-full" type="text" name="city" id="cityforminput" autocomplete="city" placeholder=" " required>
                             <label class="absolute text-gray-600 pl-4 top-1/4 left-0 text-2xl select-none" for="cityforminput">By</label>
                         </div>
                         <div class="input-field relative p-2 group text-xl cursor-pointer">
-                            <input class="text-2xl bg-gray-100 p-2 outline-none w-full" type="text" name="firstname" id="firstnameforminput" autocomplete="firstname" placeholder=" " value="Henrik" required>
+                            <input class="text-2xl bg-gray-100 p-2 outline-none w-full" type="text" name="firstname" id="firstnameforminput" autocomplete="firstname" placeholder=" " required>
                             <label class="absolute text-gray-600 pl-4 top-1/4 left-0 text-2xl select-none" for="firstnameforminput">Fornavn</label>
                         </div>
                         <div class="input-field relative p-2 group text-xl cursor-pointer">
-                            <input class="text-2xl bg-gray-100 p-2 outline-none w-full" type="text" name="surname" id="surnameforminput" autocomplete="lastname" placeholder=" " value="Valle" required>
+                            <input class="text-2xl bg-gray-100 p-2 outline-none w-full" type="text" name="surname" id="surnameforminput" autocomplete="lastname" placeholder=" " required>
                             <label class="absolute text-gray-600 pl-4 top-1/4 left-0 text-2xl select-none" for="surnameforminput">Efternavn</label>
                         </div>
                     </div>
 
                     <div>
                         <div class="input-field relative p-2 group text-xl cursor-pointer">
-                            <input class="text-2xl bg-gray-100 p-2 outline-none w-full" type="email" name="email" id="newemailforminput" autocomplete="email" placeholder=" " value="henrikvalle@gmail.com" required>
+                            <input class="text-2xl bg-gray-100 p-2 outline-none w-full" type="email" name="email" id="newemailforminput" autocomplete="email" placeholder=" " required>
                             <label class="absolute text-gray-600 pl-4 top-1/4 left-0 text-2xl select-none" for="newemailforminput">Email</label>
                         </div>
 
                         <div class="input-field relative p-2 text-xl cursor-pointer">
-                            <input class="text-2xl bg-gray-100 p-2 outline-none w-full" type="password" name="password" id="newpasswordforminput" autocomplete="new-password" placeholder=" " value="valle" required>
+                            <input class="text-2xl bg-gray-100 p-2 outline-none w-full" type="password" name="password" id="newpasswordforminput" autocomplete="new-password" placeholder=" " required>
                             <label class="absolute text-gray-600 pl-4 top-1/4 left-0 text-2xl select-none" for="newpasswordforminput">Kodeord</label>
                         </div>
                         <div class="input-field relative p-2 text-xl cursor-pointer">
-                            <input class="text-2xl bg-gray-100 p-2 outline-none w-full" type="password" name="repassword" id="repasswordforminput" autocomplete="new-password" placeholder=" " value="valle" required>
+                            <input class="text-2xl bg-gray-100 p-2 outline-none w-full" type="password" name="repassword" id="repasswordforminput" autocomplete="new-password" placeholder=" " required>
                             <label class="absolute text-gray-600 pl-4 top-1/4 left-0 text-2xl select-none" for="repasswordforminput">Gentag kodeord</label>
                         </div>
                     </div>
@@ -158,12 +158,8 @@
                 body: JSON.stringify(Object.fromEntries(datapack))
             }
             const response = await fetch(options.requestUrl, options)
-            console.log('response: ', response);
             
-            if (response.ok) {
-                const requestData = await response.text()
-                console.log('requestData: ', requestData);
-            }
+            return response;
         }
 
         document.getElementById('loginform').addEventListener('submit', (e) => {
@@ -174,8 +170,13 @@
 
         document.getElementById('signupForm').addEventListener('submit', (e) => {
             e.preventDefault()
-            const formData = new FormData(e.target) 
-            requestSignup(formData)
+            const form = e.target
+            const formData = new FormData(form) 
+            const response = requestSignup(formData)
+            console.log('response: ', response);
+            
+            form.reset()
+            
         })
         
     </script>

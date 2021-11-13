@@ -53,6 +53,22 @@ abstract class UserModel extends Dbh
         return $userDetailsResult;
     }
 
+    protected function queryUsers($query, $limit = 100, $class = "stdClass") {
+        $dbConnection = $this->connect();
+        $userDetailsQuery = "SELECT * FROM userview WHERE fullname LIKE '%$query%' LIMIT $limit"; // query for fetch userview
+        $userDetailsResult = $dbConnection->query($userDetailsQuery);
+        if ($userDetailsResult->num_rows !== 0) {
+        
+            $userDataCollection = [];   
+            while ($obj = $userDetailsResult->fetch_object($class)) {
+                $userDataCollection[] = $obj;
+            }
+            return $userDataCollection;
+        }
+
+        return $userDetailsResult;
+    }
+
     protected function checkPassword($userId) {
         $dbConnection = $this->connect();
         $uid = intval($userId);
