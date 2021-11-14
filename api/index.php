@@ -4,12 +4,16 @@ include_once "../classes/API.php";
 header("Access-Control-Allow-Headers: *");
 header('Content-Type: application/json');
 
-function getQueryParam($queryparam) {
+
+function getQueryParam($queryparam, &$queryStringParms = null) {
+    
     if (isset($_GET[$queryparam])) {
+        if (isset($queryStringParms)) $queryStringParms[$queryparam] = $_GET[$queryparam];
         return $_GET[$queryparam];
     }
 
     if (isset($_POST[$queryparam])) {
+        if (isset($queryStringParms)) $queryStringParms[$queryparam] = $_POST[$queryparam];
         return $_POST[$queryparam];
     }
     
@@ -26,13 +30,13 @@ $endPoints = array(
     'users' => '/api/users'
 );
 
-// var_dump(str_starts_with($path, $endPoints['users']), $endPoints['users']);
-// query params
-$id = getQueryParam('id'); 
-$name = getQueryParam('name'); 
-$age = getQueryParam('age'); 
-$sex = getQueryParam('sex'); 
 
+// query params
+$queryparams = [];
+$id = getQueryParam('id', $queryparams); 
+$name = getQueryParam('name', $queryparams); 
+$age = getQueryParam('age', $queryparams); 
+$sex = getQueryParam('sex', $queryparams);
 
 
 $API = new API(API::generateApiKey());
@@ -60,25 +64,39 @@ if ($path === "/api/users") {
     
 
     if (str_starts_with($path, $endPoints['users'])) {
-        //  var_dump($name);
-        // $query = substr($path, strlen($endPoints['users']));
-        $query = '?';
-        // // $query .= $id ? "id=$id" : '';
-        $query .= $name ? "name=$name"  : '';
-        // $query .= $age ? "age=$age"  : '';
-        // $query .= $sex ? "sex=$sex"  : '';
+
+        // construct a query string to sent with the response
+        $queryString = '?';
+        $keys = array_keys($queryparams);
+        for ($i = 0; $i < count($queryparams); $i++) { 
+            $key = $keys[$i];
+            $param = $queryparams[$key];
+            if ($i % 2 === 0) {
+                $queryString .= "$key=$param&";
+                continue;
+            }
+
+            $queryString .= "$key=$param";
+        }
+
+        // Verify query values
+        $query = [];
+        $genderArray = ['male', 'female', 'non-binary', 'other'];
+        $query['id'] = intval($id) !== 0 && isset($id) ? intval($id) : 'null';
+        $query['name'] = gettype($name) == 'string' && isset($name) ? $name : '';
+        $query['age'] = intval($age) !== 0 && isset($age) ? intval($age) : 0;
+        $query['sex'] = in_array($sex, $genderArray) ? $sex : 'null';
+        $queryObject = json_decode(json_encode($query));
 
         $res = array(
             "statusText" => 'Success', 
             "status" => 200,
             "apikey" => $API->apikey,
-            "query" => $query,
-            "data" => $API->users($name)
+            "query" => $queryString,
+            "data" => $API->users($queryObject)
         );
     }
 
-    // var_dump($res);
-// }
 
 http_response_code(200);
 exit(json_encode($res));

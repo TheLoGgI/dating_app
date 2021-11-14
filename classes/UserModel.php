@@ -55,7 +55,8 @@ abstract class UserModel extends Dbh
 
     protected function queryUsers($query, $limit = 100, $class = "stdClass") {
         $dbConnection = $this->connect();
-        $userDetailsQuery = "SELECT * FROM userview WHERE fullname LIKE '%$query%' LIMIT $limit"; // query for fetch userview
+        $userDetailsQuery = "CALL searchUsers('$query->name', $query->age, $query->sex, $query->id, $limit, NULL);"; // query for fetch userview
+        // $userDetailsQuery = "SELECT * FROM userview WHERE fullname LIKE '%$query%' LIMIT $limit"; // query for fetch userview
         $userDetailsResult = $dbConnection->query($userDetailsQuery);
         if ($userDetailsResult->num_rows !== 0) {
         

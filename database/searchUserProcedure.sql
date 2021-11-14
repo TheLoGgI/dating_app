@@ -1,24 +1,47 @@
-DROP PROCEDURE IF EXISTS searchUser;
+DROP PROCEDURE IF EXISTS searchUsers;
 DELIMITER // 
-CREATE PROCEDURE searchUser(
+CREATE PROCEDURE searchUsers(
     IN queryName VARCHAR(255),
     IN queryAge INT,
     IN querySex VARCHAR(50),
     IN id INT,
-    IN limitVar INT
+    IN limitVar INT,
+    IN skip INT
 ) 
 BEGIN
 
-    SET @names = SELECT * 
-        FROM userview 
-        WHERE fullname 
-        LIKE CONCAT('%', queryName, '%') ESCAPE '\'
+    IF (id IS NOT NULL) 
+        THEN
+            SELECT * FROM userview WHERE userId = id;
+    END IF;
+
+    IF (skip IS NOT NULL) 
+        THEN
+            SELECT * FROM userview 
+            WHERE 
+                age > queryAge AND 
+                fullname LIKE CONCAT('%', queryName, '%') AND
+                sex = querySex
+            LIMIT skip, limitVar;
+    END IF;
+    IF (querySex IS NOT NULL) 
+        THEN
+            SELECT * FROM userview 
+            WHERE 
+                age > queryAge AND 
+                fullname LIKE CONCAT('%', queryName, '%') AND
+                sex = querySex
+            LIMIT skip, limitVar;
+    END IF;
+
+    SELECT * FROM userview 
+        WHERE 
+            age > queryAge AND 
+            fullname LIKE CONCAT('%', queryName, '%')
         LIMIT limitVar;
-    -- @age := SELECT * FROM userview WHERE age > queryAge LIMIT limitVar;
-    -- @sex := SELECT * FROM userview WHERE sex = querySex LIMIT limitVar;
-    -- @id := SELECT * FROM userview WHERE userid = id LIMIT limitVar;
-
-    -- SELECT * from @names;
-
 END // 
 DELIMITER;
+
+-- CALL searchUsers('', 5, 'male', NULL, 5, 2);
+
+

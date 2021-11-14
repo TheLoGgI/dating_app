@@ -1,13 +1,3 @@
-<?php
-include_once "../classes/API.php";
-
-use Datingapp\API;
-
-// $API = new API(API::generateApiKey());
-// $users = $API->users();
-// var_dump($users);
-
-?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -29,18 +19,26 @@ use Datingapp\API;
         <div class="content-container max-w-screen-lg mx-auto mt-2">
         <header class="flex justify-between items-center">
             <form id="search" class="py-4">
-                    <input class="bg-gray-100 py-2 px-4 rouned-2" type="text" name="name" placeholder="matches..">
-                    <input class="bg-primary py-2 px-4 rouned-2" type="submit" value="Search match">
-                </form>
-                <form>
-                    <label for="sort" hidden>Sort</label>
-                    <select class="bg-gray-100 py-2 px-4 rouned-2" name="sort" id="sorting">
-                        <option selected disabled hidden value="">Sort</option>
-                        <option value="name">Name</option>
-                        <option value="age">Age</option>
-                        <option value="gender">Gender</option>
-                    </select>
-                </form>
+                <input class="bg-gray-100 py-2 px-4 rouned-2" type="text" name="name" placeholder="matches..">
+                <input class="bg-gray-100 py-2 px-4 rouned-2" type="number" step="1" min="0" max="25" name="age" placeholder="age above..">
+                <select class="bg-gray-100 py-2 px-4 rouned-2" name="gender" id="gender">
+                    <option selected value="">Gender (default)</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="non-binary">Non-binary</option>
+                    <option value="other">Other</option>
+                </select>
+                <input class="bg-primary py-2 px-4 rouned-2" type="submit" value="Search match">
+            </form>
+            <form>
+                <label for="sort" hidden>Sort</label>
+                <select class="bg-gray-100 py-2 px-4 rouned-2" name="sort" id="sorting">
+                    <option selected disabled hidden value="">Sort</option>
+                    <option value="name">Name</option>
+                    <option value="age">Age</option>
+                    <option value="gender">Gender</option>
+                </select>
+            </form>
         </header>
             <div id="users" class="grid grid-cols-5 gap-4">
     
@@ -78,8 +76,10 @@ use Datingapp\API;
             }))
         }
 
-        function requestUsers(searchQuery = '') {
-                fetch(`../api/users?name=${searchQuery}`, {
+        function requestUsers(queryString = '') {
+
+
+                fetch(`../api/users${queryString}`, {
                 method: 'post',
                 headers: {
                     "Content-Type": "application/json",
@@ -93,6 +93,7 @@ use Datingapp\API;
                 throw Error('Api failed to fetch users', res.status, res)
             }).then(data => {
                 console.log('data: ', data);
+                pushHistoryState(queryString)
                 _users = data.data
                 showUsers(data.data, document.getElementById('users'))
             }).catch((error) => {
@@ -103,8 +104,16 @@ use Datingapp\API;
         document.getElementById('search').addEventListener('submit', (e) => {
             e.preventDefault()
             const searchInput = document.querySelector('#search input[name="name"]').value
-            console.log('searchInput: ', searchInput);
-            requestUsers(searchInput)
+            const ageInput = document.querySelector('#search input[name="age"]').value
+            const genderInput = document.querySelector('#search select[name="gender"]').value
+            const queryString = createQueryString({
+                name: searchInput || '',
+                age: ageInput  || 0,
+                gender: genderInput || null,
+                id: null
+            })
+            console.log('queryString: ', queryString);
+            requestUsers(queryString)
         })
 
         document.getElementById('sorting').addEventListener('change', (e) => {
@@ -113,6 +122,31 @@ use Datingapp\API;
 
             showUsers(sortedUsers, document.getElementById('users'))
         })
+
+        function createQueryString(queryExpression) {
+            if (typeof queryExpression !== 'object') return '?' //return empty queryString
+            let queryString = "?"
+
+            let index = 0
+            const entries = Object.entries(queryExpression).filter(item => item[1] !== null && item[1] !== '')
+            
+            for (const [key, value] of entries) {
+                index++
+                if (!value) continue
+                if (index === entries.length) {
+                    queryString += `${key}=${value}`
+                    break
+                }
+                queryString += `${key}=${value}&`
+                
+            }
+
+            return queryString
+        }
+
+        function pushHistoryState(query) {
+            window.history.pushState("", document.title, location.origin + location.pathname + query);
+        }
 
 
         // initial run

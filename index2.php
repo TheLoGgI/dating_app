@@ -15,6 +15,7 @@ include "classes/User.php";
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="description" content="" />
     <meta name="author" content="" />
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
     <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width" />
     <title>Test</title>
 </head>
@@ -28,11 +29,18 @@ include "classes/User.php";
 // $sql = "CALL createUser('emilie@gmail.com', 'emiliepassword', 'emilie', 'emilie', 'Aarhus', '1994-01-10','male', 'Female')";
 // $sql = "CALL GetOfficeByCountry(5)";
 // $sql = "CALL createUser('$email', '$password', '$firstname', '$surname', '$city', '$birthday','$sex', '$partnergender')";
-// $result = $mySQL->query($sql);
+$sql = "CALL searchUsers('', 0, null, NULL, 100, NULL);";
+$result = $mySQL->query($sql);
+// var_dump();
 
-// print "<br>";
-// print password_hash('maltepassword', PASSWORD_DEFAULT);
-// print "<br>";
+
+
+$string = "adsasddsa";
+$int_value = intval($string);
+echo $int_value . '<br>';
+echo gettype($int_value);
+
+
 
 // var_dump($result);
 // var_dump($result->fetch_object());
@@ -55,66 +63,33 @@ include "classes/User.php";
 
 ?>
 
-<form action="?" method="POST" class="w-3/4 grid grid-cols-1 gap-8">
-                    <h1 class="text-5xl font-bold text-primary text-white text-center">Sign up</h1>
-                    <div>
-                        <div class="input-field relative p-2 group text-xl cursor-pointer">
-                            <select class="text-2xl bg-gray-100 p-2 w-full" name="sex" id="sexforminput">
-                                <option value="" selected disabled hidden>Dit køn</option>
-                                <option value="male">Mand</option>
-                                <option value="female">Kvinde</option>
-                                <option value="non-binary">non-binær</option>
-                                <option value="other">other</option>
-                            </select>
-                        </div>
-                        <div class="input-field relative p-2 group text-xl cursor-pointer">
-                            <select class="text-2xl bg-gray-100 p-2 w-full" name="partnersex" id="sexofpartnerforminput" autocomplete="sex">
-                                <option value="" selected disabled hidden>Køn partner du søger</option>
-                                <option value="male">Mand</option>
-                                <option value="female">Kvinde</option>
-                                <option value="non-binary">non-binær</option>
-                                <option value="biseksual">biseksual</option>
-                            </select>
-                        </div>
-                    </div>
+<main class="mx-auto mt-4 px-40">
 
-                    <div>
-                        <div class="input-field relative p-2 group text-xl cursor-pointer">
-                            <input class="text-2xl bg-gray-100 p-2 outline-none w-full" type="text" name="birthday" id="birthdayforminput" autocomplete="bday" placeholder=" " value="27-10-96" required>
-                            <label class="absolute text-gray-600 pl-4 top-1/4 left-0 text-2xl select-none" for="birthdayforminput">Fødselsdag (dd-mm-åå)</label>
-                        </div>
-                        <div class="input-field relative p-2 group text-xl cursor-pointer">
-                            <input class="text-2xl bg-gray-100 p-2 outline-none w-full" type="text" name="city" id="cityforminput" autocomplete="bday" value="aalborg" placeholder=" " required>
-                            <label class="absolute text-gray-600 pl-4 top-1/4 left-0 text-2xl select-none" for="cityforminput">By</label>
-                        </div>
-                        <div class="input-field relative p-2 group text-xl cursor-pointer">
-                            <input class="text-2xl bg-gray-100 p-2 outline-none w-full" type="text" name="firstname" id="firstnameforminput" autocomplete="name" value="katrine" placeholder=" " required>
-                            <label class="absolute text-gray-600 pl-4 top-1/4 left-0 text-2xl select-none" for="firstnameforminput">Fornavn</label>
-                        </div>
-                        <div class="input-field relative p-2 group text-xl cursor-pointer">
-                            <input class="text-2xl bg-gray-100 p-2 outline-none w-full" type="text" name="surname" id="surnameforminput" autocomplete="bday" value="koll" placeholder=" " required>
-                            <label class="absolute text-gray-600 pl-4 top-1/4 left-0 text-2xl select-none" for="surnameforminput">Efternavn</label>
-                        </div>
-                    </div>
+<table class="table-auto">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Full name</th>
+      <th>Age</th>
+    </tr>
+  </thead>
+  <tbody>
+<?php
+while ($obj = $result->fetch_object('stdClass')) {
+?>
+    <tr class="bg-emerald-200">
+      <td><?php print $obj->userId; ?></td>
+      <td><?php print $obj->fullname; ?></td>
+      <td><?php print $obj->age; ?></td>
+    </tr>
+    <?php } ?>
 
-                    <div>
-                        <div class="input-field relative p-2 group text-xl cursor-pointer">
-                            <input class="text-2xl bg-gray-100 p-2 outline-none w-full" type="email" name="newemail" id="newemailforminput" autocomplete="email" value="katrine@gmail.com" placeholder=" " required>
-                            <label class="absolute text-gray-600 pl-4 top-1/4 left-0 text-2xl select-none" for="newemailforminput">Email</label>
-                        </div>
+    
+  </tbody>
+</table>
 
-                        <div class="input-field relative p-2 text-xl cursor-pointer">
-                            <input class="text-2xl bg-gray-100 p-2 outline-none w-full" type="password" name="newpassword" id="newpasswordforminput" autocomplete="new-password" value="katrine" placeholder=" " required>
-                            <label class="absolute text-gray-600 pl-4 top-1/4 left-0 text-2xl select-none" for="newpasswordforminput">Kodeord</label>
-                        </div>
-                        <div class="input-field relative p-2 text-xl cursor-pointer">
-                            <input class="text-2xl bg-gray-100 p-2 outline-none w-full" type="password" name="repassword" id="repasswordforminput" autocomplete="new-password" value="katrine" placeholder=" " required>
-                            <label class="absolute text-gray-600 pl-4 top-1/4 left-0 text-2xl select-none" for="repasswordforminput">Gentag kodeord</label>
-                        </div>
-                    </div>
-                    <input type="submit" class="bg-primary hover:bg-hover-primary cursor-pointer text-white max-w-min justify-self-center text-2xl rounded-full px-16 py-2 filter drop-shadow-lg" value="SIGN UP">
-                </form>
 
+</main>
     <script>
         fetch('api/users').then(res => res.json()).then(data => {
             console.log('data: ', data);
