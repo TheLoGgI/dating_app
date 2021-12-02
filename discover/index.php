@@ -77,8 +77,6 @@
         }
 
         function requestUsers(queryString = '') {
-
-
                 fetch(`../api/users${queryString}`, {
                 method: 'post',
                 headers: {
@@ -109,7 +107,7 @@
             const queryString = createQueryString({
                 name: searchInput || '',
                 age: ageInput  || 0,
-                gender: genderInput || null,
+                sex: genderInput || null,
                 id: null
             })
             console.log('queryString: ', queryString);
@@ -131,6 +129,8 @@
             const entries = Object.entries(queryExpression).filter(item => item[1] !== null && item[1] !== '')
             
             for (const [key, value] of entries) {
+                console.log('key, value: ', key, value);
+                
                 index++
                 if (!value) continue
                 if (index === entries.length) {

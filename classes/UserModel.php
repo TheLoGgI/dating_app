@@ -1,13 +1,6 @@
 <?php namespace Datingapp;
 
 include "Dbh.php";
-// include "API.php";
-// interface FormValidationInterface {
-//     public function hasEmptyInputs();
-//     public function passwordMatch(); 
-//     public function invalidUid();
-
-// }
 
 
 abstract class UserModel extends Dbh

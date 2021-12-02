@@ -24,7 +24,7 @@ BEGIN
                 sex = querySex
             LIMIT skip, limitVar;
     END IF;
-    IF (querySex IS NOT NULL) 
+    IF (querySex IS NOT NULL OR querySex != '') 
         THEN
             SELECT * FROM userview 
             WHERE 
