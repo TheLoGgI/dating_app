@@ -113,7 +113,6 @@
         if (!empty($_GET['id'])) {
             $currentUser = Person::GetUser($_GET['id']);
             $currentUser->FindMatches();
-            // var_dump($currentUser->matches);
 
         ?>
             <h2 class="text-4xl font-bold text-blue-600 my-6">Selected User</h2>
